@@ -1,0 +1,7 @@
+gin的使用
+一、安装gin
+    创建完文件以后使用go get 命令完成gin的安装
+    在所创建文件夹的目录下使用命令go get -u github.com/gin-gonic/gin
+    如果下载不了：1goland中可以找文件——设置——go——go模块——环境，然后输入GOPROXY=http://goproxy.cn,direct
+                 2看看是不是打错字了
+                 3系统环境变量中搞一个变量，名字是GOPROXY，值是http://goproxy.cn,direct 

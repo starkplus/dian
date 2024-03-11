@@ -5,3 +5,40 @@ gin的使用
     如果下载不了：1goland中可以找文件——设置——go——go模块——环境，然后输入GOPROXY=http://goproxy.cn,direct
                  2看看是不是打错字了
                  3系统环境变量中搞一个变量，名字是GOPROXY，值是http://goproxy.cn,direct 
+_______________________________________________
+例子
+package main
+
+import "github.com/gin-gonic/gin"
+【func 函数名（在其他页面上想访问到那么首字母应该大写）（context *gin.Context）{context.函数（数字，“对应前面函数”）】
+【上面中函数可以是】
+func main() {
+	ginServer := gin.Default()
+
+	ginServer.GET("/hello", func(context *gin.Context) {
+		context.String(200, "hello")
+	})【或写作ginServer.GET("/访问地址名",上面【】中的函数名】
+	ginServer.Run(":8082")
+}
+
+————————————————————————————————————————————————————————
+具体讲解：
+//创建一个默认的路由（路由分为前台中台后台路由，前台的路由只需要验证是否登录，中台和后台的需要验证是不是超级管理员）
+ginServer：=gin.Default()//不需要什么作用时就用default创建默认的路由即可，路由名ginServer可以换做其他的
+
+ginServer.GET("/地址名"，对应的处理函数)
+处理函数也可以在外面先写出来，也可以像上面一样直接写出来
+
+//启动监听，gin会把web服务运行在本机的0.0.0.0:8082端口上，默认ip0.0.0.0
+//启动方式：此时也可以在命令行中使用curl http://上面的ip地址+:访问地址（如gin学习中的8080）+/访问地址名
+                                               具体见dos命令行中ip地址的查询，查询出来的ip默认时均可以用此
+       （1）（2）经过封装后的方法 
+            ginServer.Run(":地址")//如上面8082(也可以写作8080）就代表本电脑所有ip地址
+       （2）原生http启动方式：
+                      http.ListenAndServer(":8082",ginServer)
+          //修改ip，不是默认
+           ginServer.Run（"数.数.数.数：地址"）//比如改成127.0.0.1:8081，那么dos命令行中查询出来的其他ip就不行了
+                                                  而如果是0.0.0.0那么就是本机内网ip均可以访问  
+                                                再比如改成其他ip可以让其他人在他们的电脑上访问
+
+

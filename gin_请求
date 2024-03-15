@@ -1,0 +1,45 @@
+一、查询参数，优点是想到什么参数就查询，不用记位置？
+例子：
+func _query(c *gin.Context) {
+	fmt.Println(c.Query("user"))
+	fmt.Println(c.GetQuery("users"))
+	fmt.Println(c.QueryArray("users"))//
+	fmt.Println(c.QueryMap("user"))
+  此处还可以jSON响应等的内容，可以顺带在页面显示内容，因为query请求是从页面传到系统，所以页面不会有东西
+}
+func main() {
+	ginServer := gin.Default()
+	ginServer.GET("q", _query)
+	ginServer.Run(":80")
+}
+
+127.0.0.1/q?id=2&user=     &users=     &users=          &user=
+有查询名：127.0.0.1/q?id=2&user=     &users=     &users=          &user=  此处即使等号后面为空（即查询值为空）也是有查询的
+无查询名：127.0.0.1/q?id=2只要没有写查询名（即没有写user才算没有查询）？，id=2&等都没有关系
+
+具体讲解：
+	fmt.Println(c.Query("查询名"))这个请求只能获得单独的查询值
+	fmt.Println(c.GetQuery("查询名"))这个请求在接受查询值的同时还会判断是否使用了查询值
+	fmt.Println(c.QueryArray("查询名"))//这个请求可以获得多个查询值
+	fmt.Println(c.QueryMap("查询名"))//这个用的很少，两个up都没有讲
+  c.GetQuery("查询名")有两个返回值可以用两个变量接受，也可以像上面一样直接打印出来两个
+  c.DefaultQuery("查询名","没有用查询名时候的查询值")注意如上面的例子中
+	ginServer.GET("访问地址", 函数)
+两种页面请求
+127.0.0.1/访问地址?id=2&user=字符串     &users=     &users=          &user=
+127.0.0.1/访问地址?查询名=字符串       都一样但是第一个不用管查询名
+二、动态参数
+例子:优点是在网页搜索时候不用再输入查询名，而是直接输入值就可以
+func _param(c *gin.Context){
+fmt.Println(c.Param("user_id"))
+	fmt.Println(c.Param("book_id"))
+	c.JSON(200, gin.H{"name": c.Param("user_id")})//复习写一下JSON
+}
+func main() {
+	ginServer := gin.Default()
+	ginServer.GET("/web/:user_id", _param)
+	ginServer.GET("/web/:user_id/:book_id", _param)/显示book_id而不显示user_id
+	ginServer.Run(":80")
+}
+讲解：
+ginServer.GET("/查询地址/:查询名", _param)

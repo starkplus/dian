@@ -122,15 +122,15 @@ ginServer.GET("/地址名"，对应的处理函数)
                                          gin.H{  变量（类型1）： 变量（类型2），
                                                 变量（类型1）： 变量（类型2）}
                      3、xml响应
-         func _xml(c *gin.Context) {
-	//type UserInfo struct {
-	//	Username string
-	//	Age      int
-	//	password string
-	//}
-	//user := UserInfo{"wang", 19, "1233456"}
-	c.XML(200, gin.H{"username": "wang", "age": "18", "data": gin.H{"massage": "hey"}})
-}
+                           func _xml(c *gin.Context) {
+         	//        type UserInfo struct {
+	        //	  Username string
+	        //	  Age      int
+	        //	  password string
+        	//         }
+	        /          /user := UserInfo{"wang", 19, "1233456"}//此处貌似能用结构体，但是up搞错了，我也不知道怎么用
+	           c.XML(200, gin.H{"username": "wang", "age": "18", "data": gin.H{"massage": "hey"}})
+                            }
                     4、yaml响应，和xml相同  但是输入ip后默认的行为是把这个东西下载下来，而不是在页面中打开
                     5、html响应， 
                    首先有一个模板文件（目录）一般放在根目录下（即该打开的文件夹的目录）
@@ -142,3 +142,29 @@ ginServer.GET("/地址名"，对应的处理函数)
                    然后与上面xml、yaml接近
                    c.HTML(状态码,"上面放的html文件的名字",gin.H{"username": "wang", "age": "18", "data": gin.H{"massage": "hey"}}
                                                                   gin.H此处如果不写任何东西，那么页面中只会显示body下面的值
+                func main(){
+                   ginServer：=gin.Default()
+                   ginServer.LoadHTMLGlob("temphtml/*")
+                   ginServer.GET("html", _html)
+                     ginServer.Run("80")
+                            }
+————————————————6、文件响应：
+                首先在文件目录下创建一个新文件夹，在里面放一张图片
+                	//在golang中，没有相对于文件的路径，只有相对于项目的路径，
+                        也就是在该xinagying.go中可以直接通过根目录去访问fish.jpg,而不需要相对于xiangying.go去找jpg的路径
+                        ginServer.StaticFile("访问路径", "相对于项目的路径")这是访问单个文件的用法即该文件所处文件夹中其他的文件访问不了(但是图片可以访问?)
+                        ginServer.StaticFS("ip访问填写的路径", http.Dir("相对于该项目的路径"))这是访问一个文件夹的用法
+               举例：
+                      func main（）{
+                     ginServer：=gin.Default()
+                     ginServer.StaticFS("/file", http.Dir("pictures/textfile"))
+                     ginServer.Staticfile("/pictures/fish/","pictures/fish.jpg")后面的或者./pictures/fish.jpg
+                     ginServer.Run("80")
+		      }//页面访问时输入127.0.0.1：80/pictures/fish
+              7、重定向
+                        func _redirect(c *gin.Context) {
+	                  c.Redirect(状态码, "跳转地址")
+                               }
+                       状态码中301是永久缓存，更改地址后没有用；302是暂时缓存，更改后有用
+                     用法和xml、Json一样，需要在main函数中写
+                             	ginServer.GET("访问地址", _redirect)

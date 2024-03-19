@@ -1,0 +1,11 @@
+linux常用命令：
+   cd   改变目录：          
+   cd..   回退到上一个目录：   
+   pwd  显示当前所在的目录路径：
+   ls（ll）：    列出当前目录中的所有文件，ll列出的内容更加详细
+   touch：    新建一个文件
+        例如touch index.js会在当前目录下新建一个index.js文件
+   rm   删除一个文件
+      例如rm index.js会把index.js文件删除
+   mkdir  创建一个新的目录（文件夹）
+   rm -r

@@ -1,0 +1,17 @@
+一、打开方式，
+1下载文件夹
+2shift+鼠标右键
+二、介绍：
+git GUI：git提供的图形界面工具
+GIT Bash：git提供的窗口
+三、使用  
+打开gitbash
+配置：
+       设置用户名git config --global user.name "用户名"
+       设置邮箱git config --global user.email "邮箱名"（邮箱不一定真实存在）
+查看配置信息
+       git config --global user.name
+       git config --global user.email
+为常用指令配置别名：
+创建文件：touch ~/文件名（~表示当前的根目录，在桌面打开的git那么此时的根目录就是桌面）
+            用处在于windows中不允许创建以.开头的文件，此时可以用这个方式创建，

@@ -8,11 +8,15 @@ GIT Bash：git提供的窗口
 本地空间，自己电脑上所写的项目所在的目录
 暂存区：
 工作流程：1工作目录中添加、修改文件2、将文件提交到暂存区（git add）
+公钥：
+   免密码登录，即每次上传文件到仓库的时候不用输入密码
 三、使用  
 打开gitbash
 配置：
        系统配置所在：Git\etc\gitconfig,git安装目录下的gitconfig 是系统本身的配置
-       用户的配置所在：C：\user\Administrator\.gitconfig
+       用户的配置所在：可在环境变量中用户变量的HOME见到
+       直接在终端输入命令进入vim编辑：
+       git config --global --edit
        设置用户名：
               git config --global user.name "用户名" 用户名中没有空格的话可以省略双引号
        设置邮箱：
@@ -25,13 +29,31 @@ GIT Bash：git提供的窗口
               git config -l 显示git的所有配置
               git config --system --list 显示系统配置的（上面配置的用户名与用户邮箱不算）
               git config --global --list显示本地的
+        生成秘钥：ssh-keygen -t rsa（还有一些其它的加密算法（即rsa可换成其他的）但默认的是rsa）然后一路回车
+                     
 为常用指令配置别名：
    创建文件：touch ~/文件名（~表示当前的根目录，在桌面打开的git那么此时的根目录就是桌面）
               （试了一下好像还是和linux一样应该用touch 文件名，而不是~/）
                用处在于windows中不允许创建以.开头的文件，此时可以用这个方式创建，
 主要使用命令:
-    六个：
+         git status,查询当前目录中文件的状态
+         git add
+            例如git add .(注意add与.中间有空格)可以让目录下所有文件进入暂存区
+         git conmmit
+              例如：git commit -m "提交的信息比如增加了输入功能"提交到本地仓库
         （1）创建仓库：
              本地仓库搭建：git init
-             克隆仓库到本地：git clone【url】
-        （2）
+             克隆仓库到本地：git clone【url】，URL是类似网址的东西（？）
+        （2）git文件操作：
+             文件有四种状态：Untracked未跟踪，刚创建出来的文件都是问跟踪状态，通过git add.可以变换状态为stated、
+                            Unmodify
+                            Modified
+                            stated暂存状态
+        （3）git.ignore文件：忽略文件文件中有的不需要提交，不去提交到暂存区
+             在文件中输入以下代码有这样的作用
+               *扩展名，比如*.txt,那么所有txt文件就不会上传
+               ！文件名，与其他代码结合，是代码对该文件不管用
+               /目录名，忽略根目录下除了该目录的目录
+               目录名/忽略该目录下的所有文件
+               例如：doc/*.txt是忽略doc下的txt
+         

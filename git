@@ -4,12 +4,23 @@
 二、介绍：
 git GUI：git提供的图形界面工具
 GIT Bash：git提供的窗口
-工作区
+vi文件名可以在git bash命令窗口中打开并改变文件的内容（仍然是esc然后：wq退出vi）
+                  也可以shift +z +z退出
+版本id：
+HEAD~或者 HEAD^表示上个版本id
+HEAD~2表示上上个版本id 同理可以变34567...
+工作区：
+gitbash进入工作区文件夹使用
 本地空间，自己电脑上所写的项目所在的目录
 暂存区：
+git ls-files可以列出暂存区文件 
+仓库：
+
 工作流程：1工作目录中添加、修改文件2、将文件提交到暂存区（git add）
 公钥：
    免密码登录，即每次上传文件到仓库的时候不用输入密码
+   ssh-keygen -t 协议 -b 生成大小
+   ssh-keygen -t rsa -b 4096
 三、使用  
 打开gitbash
 配置：
@@ -35,38 +46,112 @@ GIT Bash：git提供的窗口
    创建文件：touch ~/文件名（~表示当前的根目录，在桌面打开的git那么此时的根目录就是桌面）
               （试了一下好像还是和linux一样应该用touch 文件名，而不是~/）
                用处在于windows中不允许创建以.开头的文件，此时可以用这个方式创建，
-主要使用命令:
+主要使用命令:（linux中所有命令均可用）
          ll/ls查看工作区的文件
-         git ls-files
-         git status,查询暂存区的文件状态
+         git ls-files查看暂存区文件 
+         git status,查询版本的文件状态（哪个文件是新的/没有commit的）
+                       还可以查询是否多分支修改同一文件
+         git rm 文件名 可以删除文件（在工作区和暂存区中同时删除）
+             （或者也可以先linux命令rm删除，然后git add .让暂存区中也删除）
+             最后需要commit
+         git rm --cached<file>
+                把文件从暂存区中删除，但保留在工作区中(从版本库中删除但是本地没有删除)
+         git rm -r*递归删除某个目录下的所有子目录和文件、
+            最后需要commit
          git add
             例如git add .(注意add与.中间有空格)可以让目录下所有文件进入暂存区，.表示当前目录
                 git add *.txt可以让所有txt文件都进入暂存区
          git conmmit
               例如：git commit -m "提交的信息比如增加了输入功能"提交到本地仓库
                不输入-m会默认进入vim编辑器，此时可以用方向键移动光标，用i键进入编辑模式，在第一行中写下来提交信息，然后ESC回到命令模式，再输入：wq退出vim
+              再例如：git commit -am 提交时同时修改暂存区和仓库，即不需要git add .
+         git commit              将暂存区内容提交到版本库, 进入 vi 命令界面输入提交信息
+         git commit [file1] [file2] [...]            将某些已被跟踪的文件提交到版本库（包含工作区和版本库）
+         git commit -m [message]         将暂存区内容提交到版本库, 无需进入 vi 命令界面输入提交信息
+         git commit -am [message]            跳过 git add, 将所有*已被跟踪*的文件（已经提交过一次修改的文件）更改提交到版本库
+           使用一次新的commit, 替代上一次提交
+         如果代码没有任何新变化, 则用来改写上一次commit的提交信息
+         git commit --amend -m [message]
 
          git log可以 查看提交记录
               git log --oneline可以查看简洁的提交记录 
+                 git log --graph --oneline --decorate --all查看分支图
+         git reflog查看操作的历史记录
          git reset 
-              git reset --soft 要回退到的代码（通过git log 查看） 工作区和暂存区的内容都不会被清空
-              git reset --hard 要回退到的代码 工作区和暂存区的内容都会被清空
-              git reset --mixed 要回退到的代码（默认是mixed）工作区的不会被清空，暂存区的会被清空
-              回退到的代码还可写作：HEAD^
+              工作区，暂存区，版本，仓库状态
+              git reset --soft 要回退到的版本id（通过git log 查看） 工作区和暂存区的内容都不会被清空（提交历史会变化，仓库状态会变化）
+              git reset --hard 要回退到的版本id 工作区和暂存区的内容都会被清空
+              git reset --mixed 要回退到的版本id（默认是mixed）工作区的不会被清空，暂存区的会被清空
+              回退到的版本id还可写作：HEAD^（表示上个版本/）
+         git diff 【版本id】 【版本id】 【文件名】比较差异
+           默认比较的是工作区和暂存区的文件差别
+           git diff HEAD比较工作区和仓库（版本库）的差别
+           git diff --cached比较暂存区和版本库之间的差异
+           git diff 版本id1 版本id2 可以比较版本1和2之间的差别，一般来说1为早版本（HEAD可用于表示目前最新id）
+           git diff 版本id1 版本id2 文件名，只比较这两个版本中这个文件的差异
+           git diff 还可以在两次分支修改同一文件产生冲突时显示两个修改 
         （1）创建仓库：
              本地仓库搭建：git init（在当前目录下创建git仓库）
                           git init 目录名 （在当前目录下创建一个目录并在其中创建git仓库）
              克隆仓库到本地：git clone【url】，URL是类似网址的东西（？）
         （2）git文件操作：
-             文件有四种状态：Untracked未跟踪，刚创建出来的文件都是问跟踪状态，通过git add.可以变换状态为stated、
+             文件有四种状态：Untracked未跟踪，刚创建出来的文件都是问跟踪状态，通过git add.可以变换状态为stated，
+                                    跟踪状态的文件才能git commit -am
                             Unmodify
                             Modified
                             stated暂存状态
-        （3）git.ignore文件：忽略文件文件中有的不需要提交，不去提交到暂存区
+        （3）.gitignore文件：忽略文件文件中有的不需要提交，不去提交到暂存区（但是生效的前提是要忽略文件没有添加到版本库中）
              在文件中输入以下代码有这样的作用
                *扩展名，比如*.txt,那么所有txt文件就不会上传
-               ！文件名，与其他代码结合，是代码对该文件不管用
-               /目录名，忽略根目录下除了该目录的目录
+               ！文件名，比如*ceshi.txt 表示在上面一行的基础上（忽略所有.txt）不忽略ceshi.txt
+               /目录名，忽略根目录下的该目录，但是不忽略其余子目录下的重名目录
+                       比如根目录下有 ceshi   dian两个文件夹 而ceshi中也有一个dian文件夹
                目录名/忽略该目录下的所有文件
-               例如：doc/*.txt是忽略doc下的txt
-         
+               例如：doc/*.txt是忽略doc下的txt，但是不忽略doc下的子目录的
+                       doc
+四、
+    .gitignore (是个文件，不是文件夹)
+    忽略.class文件(java编译自动生成)
+    忽略所有.o（C编译自动生成）
+五、远程仓库与本地仓库
+    （1）先远程再本地
+    git clone 地址直接从远程仓库下载到本地
+（ 此处涉及到公钥
+公钥：
+   免密码登录，即每次上传文件到仓库的时候不用输入密码
+   ssh-keygen -t 协议 -b 生成大小
+   ssh-keygen -t rsa -b 4096
+ ）
+    进行修改
+    git add .
+    git commit -m ""
+   (以上两步中如果没有创建新文件、即没有untracked，那么可以直接git commit -am "")
+    git push
+     (2)先本地在创远程
+    本地仓库中打开git bash 
+    git remote add [仓库名（随便写、不用必须和远程一致）] 仓库地址
+    git remote -v 可以查看此时仓库关联的远程仓库地址
+    git branch -M main 指定分支的名称为main
+    git push -u 【上面remote写的仓库名】 本地仓库分支:远程仓库分支（如果两个分支都一样那么可以只写一个分支名）
+      例如：把本地的main分支与远程的main分支联系起来
+            git push -u orgin main
+    git pull 【远程仓库名】 远程分支名:本地仓库分支名（如果本地仓库与远程仓库已经追踪了，那么直接git pull 就可以了）
+六、分支
+   git branch查看目前仓库的所有分支
+   git branch 【新分支名字】
+   git checkout 【分支名】切换分支
+      同时checkout 文件名 会恢复文件到修改之前，因此git checkout 有歧义
+   git switch 分支名 也是切换分支的命令，而且没有歧义
+   git merge 【被合的分支名】 把merge后边的分支合并到当前分支中，因此想要合并分支到一个分支中必须要首先切换到这个分支中
+          git log --graph --oneline --decorate --all查看分支图
+          合并分支后原来的分支还在
+          git branch -d 被合并的分支名 可以删除被合并的分支名（只能删除被合并的分支）
+           git branch -D 分支名  可以强制删除分支，不管分支是否被合并过了
+          分支冲突 ：两个分支同时对一个文件进行修改
+           可以用git status；git diff 看冲突内容/冲突文件
+            合并冲突时实际上还是修改并合并了文件的，此时两个分支已经正在合并，
+           此时只需要vi 进入冲突的文件中，进行修改然后git add . git commit 就行
+              如果想要取消，就git merge --abort就可
+      优点：不破坏原本的
+  git rebase 要变基到的分支名 把此时的分支变基到
+        rebase一般不会用在主分支，一般用于只有自己的开发分支

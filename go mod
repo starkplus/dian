@@ -10,3 +10,10 @@ verify： 检查当前模块的依赖是否已经存储在本地下载的源代�
 （下载的位置时本地缓存）
 why： 查看为什么需要依赖某模块
 ——————————————————————————————————————————————————————————————
+go mod默认在goland创建文件时就会打开，
+有了go mod ，然后创建文件
+在接下来
+1、使用go get -u 命令下载相关配置，(如gorm就需要go get -u gorm.io/gorm     go get -u gorm.io/driver/sqlite 两个go get)
+   此时gomod 文件中会出现所导入的github相关的包
+       注：go 
+2、自己导入github库文件（大概使用git仓库？）

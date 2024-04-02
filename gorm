@@ -1,4 +1,31 @@
-gorm安装：
+一、gorm安装：
 1、go get -u
 go get -u gorm.io/gorm
-go get -u gorm.io/driver/sqlite
+go get -u gorm.io/driver/sqlite（sqlite是一个数据库，而我用的是mysql，所以我写的是go get -u gorm.io/driver/mysql）
+
+二、grom运行
+1、简单例子（连接数据库，并创建一个新内容）：
+package main
+import (
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
+)
+
+type UserInfo struct {
+	ID     int
+	name   string
+	gender string
+	hobby  string
+}
+
+func main() {
+	dsn := "root:WhN0708302004@(127.0.0.1:3306)/db1?charset=utf8mb4&parseTime=True&loc=Local"
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	if err != nil {
+		panic(err)
+	}
+	db.AutoMigrate(&UserInfo{})
+	u1 := UserInfo{1, "wang", "nan", "lanqiu"}
+	db.Create(&u1)
+}
+

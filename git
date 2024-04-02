@@ -141,6 +141,7 @@ git ls-files可以列出暂存区文件
    git branch 【新分支名字】
    git checkout 【分支名】切换分支
       同时checkout 文件名 会恢复文件到修改之前，因此git checkout 有歧义
+        git checkout 版本id 会导致head指针处于游离状态
    git switch 分支名 也是切换分支的命令，而且没有歧义
    git merge 【被合的分支名】 把merge后边的分支合并到当前分支中，因此想要合并分支到一个分支中必须要首先切换到这个分支中
           git log --graph --oneline --decorate --all查看分支图
